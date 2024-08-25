@@ -1,0 +1,1 @@
+ld: warning: object file (/Users/tchuang/GitHub/ros2swift/OpenSSL-for-iPhone/bin/iPhoneSimulator18.0-x86_64.sdk/lib/libcrypto.a[659](v3err.o)) was built for newer 'iOS-simulator' version (15.0) than being linked (14.0)

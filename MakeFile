@@ -1,0 +1,35 @@
+env:
+	python3 -m venv ros2venv
+	source ros2venv/bin/activate
+
+pip_install:
+	python3 -m pip install --upgrade pip
+	python3 -m pip install -r requirements.txt
+
+vcs_import:
+	vcs import ros2_ws/src < ./ros2_min.repos
+
+colcon_build_mac:
+	mkdir -p ros2_mac
+	mkdir -p ros2_mac/deps
+	touch ros2_ws/src/ros2/rcl_logging/rcl_logging_spdlog/AMENT_IGNORE
+	colcon build --base-paths ros2_ws/src --install-base ros2_mac/install --build-base ros2_mac/build --merge-install --cmake-force-configure  --cmake-args -DBUILD_TESTING=NO -DFORCE_BUILD_VENDOR_PKG=OFF -DTHIRDPARTY=FORCE -DCOMPILE_TOOLS=NO -DBUILD_MEMORY_TOOLS=OFF -DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop -DCMAKE_PREFIX_PATH=./ros2_mac/deps
+
+# Reference
+# colcon build --install-base /Users/tchuang/GitHub/ROS2-On-iOS/ros2_macOS/base --merge-install --cmake-force-configure --cmake-args -DBUILD_TESTING=NO -DFORCE_BUILD_VENDOR_PKG=OFF -DTHIRDPARTY=FORCE -DCOMPILE_TOOLS=NO -DBUILD_MEMORY_TOOLS=OFF -DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop -DCMAKE_PREFIX_PATH=/Users/tchuang/GitHub/ROS2-On-iOS/ros2_macOS/deps
+
+colcon_build_ios_simulator:
+	mkdir -p ros2_ios_sim
+	colcon build --base-paths ros2_ws/src --install-base ros2_ios_sim/install --build-base ros2_ios_sim/build --merge-install --cmake-force-configure --cmake-args -DBUILD_TESTING=NO -DFORCE_BUILD_VENDOR_PKG=OFF -DTHIRDPARTY=FORCE -DCOMPILE_TOOLS=NO -DBUILD_MEMORY_TOOLS=OFF -DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop -DCMAKE_TOOLCHAIN_FILE=/Users/tchuang/GitHub/ROS2-On-iOS/cmake/iOS_Simulator.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_SYSROOT= --cmake-args -DBUILD_TESTING=NO -DFORCE_BUILD_VENDOR_PKG=OFF -DTHIRDPARTY=FORCE -DCOMPILE_TOOLS=NO -DBUILD_MEMORY_TOOLS=OFF -DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop -DCMAKE_TOOLCHAIN_FILE=/Users/tchuang/GitHub/ROS2-On-iOS/cmake/iOS_Simulator.cmake -DOPENSSL_ROOT_DIR=/Users/tchuang/GitHub/ros2swift/OpenSSL-for-iPhone/bin/iPhoneSimulator18.0-x86_64.sdk -DOPENSSL_LIBRARIES=/Users/tchuang/GitHub/ros2swift/OpenSSL-for-iPhone/bin/iPhoneSimulator18.0-x86_64.sdk/lib 
+
+#-DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_SYSROOT=/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.0.sdk
+# --cmake-args -DBUILD_TESTING=NO -DFORCE_BUILD_VENDOR_PKG=OFF -DTHIRDPARTY=FORCE -DCOMPILE_TOOLS=NO -DBUILD_MEMORY_TOOLS=OFF -DRCL_LOGGING_IMPLEMENTATION=rcl_logging_noop
+# colcon build --merge-install --cmake-args -DCMAKE_TOOLCHAIN_FILE=ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DIOS_PLATFORM=SIMULATOR64 -DIOS_DEPLOYMENT_TARGET=13.0
+source_ros2:
+	source ros2_mac/install/setup.zsh
+	source ros2_mac/install/setup.bash
+
+clean:
+	rm -rf ros2_ios_sim/build
+	rm -rf ros2_ios_sim/install
+	rm -rf log

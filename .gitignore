@@ -88,3 +88,11 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+ros2venv
+ros2_ws/build
+ros2_ws/install
+ros2_ws/log
+log
+ros2_ios_sim
+ros2_mac
